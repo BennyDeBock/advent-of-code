@@ -16,27 +16,27 @@ const input = await readInputFromFile('./input.txt')
 
 // Part 1
 // Reduce to sum of calibration values
-// const combinedCallibrationValue = input.reduce((sum, inputString) => {
-//   let firstNumber
-//   let lastNumber
+const combinedCallibrationValue = input.reduce((sum, inputString) => {
+  let firstNumber
+  let lastNumber
 
-//   inputString.split('').forEach((character) => {
-//     if(character.match(/\d/)) {
-//       if(!firstNumber) {
-//         firstNumber = character
-//         lastNumber = character
-//       } else {
-//         lastNumber = character
-//       }
-//     }
-//   })
+  inputString.split('').forEach((character) => {
+    if(character.match(/\d/)) {
+      if(!firstNumber) {
+        firstNumber = character
+        lastNumber = character
+      } else {
+        lastNumber = character
+      }
+    }
+  })
 
-//   const callibrationValue = firstNumber + lastNumber
-//   return sum += parseInt(callibrationValue)
-// }, 0)
+  const callibrationValue = firstNumber + lastNumber
+  return sum += parseInt(callibrationValue)
+}, 0)
 
-// // Log result
-// console.log(combinedCallibrationValue);
+// Log result
+console.log(combinedCallibrationValue);
 
 // Part 2
 const digitDictionary = {
@@ -59,8 +59,8 @@ const digitDictionary = {
 function replaceAllWrittenNumbersInString(numberString, indices) {
   let replacedString = numberString
   for (const indice of indices) {
-    const regex = new RegExp(indice.key)
-    replacedString = replacedString.replace(regex, digitDictionary[indice.key])
+    const regex = new RegExp(indice.key, "g")
+    replacedString = replacedString.replace(regex, `${digitDictionary[indice.key]}${regex.source}`)
   }
   return replacedString
 }
@@ -73,27 +73,16 @@ function replaceAllWrittenNumbersInString(numberString, indices) {
 function getIndexOrderOfString(numberString) {
   const indices = []
 
-  for (const [key] of Object.entries(digitDictionary)) {
-    const regex = new RegExp(key, 'gi')
-    let result
-
-    while( (result = regex.exec(numberString)) ) {
+  for (const [key, value] of Object.entries(digitDictionary)) {
+    if(numberString.indexOf(key) != -1) {
       indices.push({ 
         key: key,
-        index: result.index
+        index: numberString.indexOf(key)
       })
     }
-    // if(numberString.indexOf(key) != -1) {
-    //   indices.push({ 
-    //     key: key,
-    //     index: numberString.indexOf(key)
-    //   })
-    // }
   }
 
   const sortedIndices = indices.sort((a,b) => a.index - b.index)
-
-  //console.log(numberString, sortedIndices);
   return sortedIndices
 }
 
@@ -116,7 +105,6 @@ const combinedCallibrationValueWithWrittenNumbers = input.reduce((sum, inputStri
   })
 
   const callibrationValue = firstNumber + lastNumber
-  console.log(`${newString}. callibrationValue: ${firstNumber}${lastNumber}`);
   return sum += parseInt(callibrationValue)
 }, 0)
 
