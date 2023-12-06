@@ -39,3 +39,10 @@ const gameSum = games.reduce((sum, game) => {
 }, 0)
 
 console.log(gameSum);
+
+// Reduce minimum set of cubes to a power sum
+const gamePowerSum = games.reduce((sum, game) => {
+  return sum + game.getPowerOfFewestAmountOfCubes()
+}, 0)
+
+console.log(gamePowerSum);

@@ -7,7 +7,7 @@ export class Game {
     const game = gameString.split(':')
 
     // Set game ID
-    this.id = game[0].slice(-1)
+    this.id = game[0].split(' ')[1]
 
     // Initialize game sets
     const setStrings = game[1].split(';')
@@ -16,6 +16,10 @@ export class Game {
     for(const set of setStrings) {
       this.sets.push(new GameSet(set.trim()))
     }
+  }
+
+  isValid() {
+    return this.#isValid
   }
 
   /**
@@ -35,8 +39,23 @@ export class Game {
     }
   }
 
-  isValid() {
-    return this.#isValid
+  getPowerOfFewestAmountOfCubes() {
+    let minimumRed = 0, minimumBlue = 0, minimumGreen = 0
+    for(const set of this.sets) {
+      console.log(`Set has ${set.getRedCubes()} red, ${set.getBlueCubes()} blue and ${set.getGreenCubes()} green cubes`);
+      if(+set.getRedCubes() > minimumRed){
+        minimumRed = set.getRedCubes()
+      }
+      if(+set.getBlueCubes() > minimumBlue){
+        minimumBlue = set.getBlueCubes()
+      }
+      if(+set.getGreenCubes() > minimumGreen){
+        minimumGreen = set.getGreenCubes()
+      }
+    }
+
+    console.log(`Minimum amount of cubes in Game ${this.id}: red ${minimumRed} blue ${minimumBlue} green ${minimumGreen} \n`);
+    return +minimumRed * +minimumBlue * +minimumGreen
   }
 }
 
