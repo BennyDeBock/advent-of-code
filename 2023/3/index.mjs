@@ -53,6 +53,50 @@ for(let yIndex = 0; yIndex < inputArray.length; yIndex++) {
 
 console.log(calculateSumAdjacentNumbers(adjecentNumbers))
 
+const adjacentNumbers = []
+const onlyStarRegex = new RegExp(/[*]+/)
+for(let yIndex = 0; yIndex < inputArray.length; yIndex++) {
+  for(let xIndex = 0; xIndex < inputArray[yIndex].length; xIndex++) {
+    if(inputArray[yIndex][xIndex].match(onlyStarRegex))
+    {
+      const temporaryAdjacentNumbers = []
+      // Check left and right of the symbol
+      temporaryAdjacentNumbers.push(returnAdjacentNumberBasedOnDirection(yIndex, xIndex, inputArray, 'left'));
+      temporaryAdjacentNumbers.push(returnAdjacentNumberBasedOnDirection(yIndex, xIndex, inputArray, 'right'));
+
+      // Check the row above the symbol
+      if(returnAdjacentNumberBasedOnDirection(yIndex - 1, xIndex, inputArray, 'omni')) {
+        temporaryAdjacentNumbers.push(returnAdjacentNumberBasedOnDirection(yIndex - 1, xIndex, inputArray, 'omni'));
+      } 
+      else 
+      {
+        temporaryAdjacentNumbers.push(returnAdjacentNumberBasedOnDirection(yIndex - 1, xIndex, inputArray, 'left'));
+        temporaryAdjacentNumbers.push(returnAdjacentNumberBasedOnDirection(yIndex - 1, xIndex, inputArray, 'right'));
+      }
+
+      // Check the row beneath the symbol
+      if(returnAdjacentNumberBasedOnDirection(yIndex + 1, xIndex, inputArray, 'omni')) {
+        temporaryAdjacentNumbers.push(returnAdjacentNumberBasedOnDirection(yIndex + 1, xIndex, inputArray, 'omni'));
+      } 
+      else 
+      {
+        temporaryAdjacentNumbers.push(returnAdjacentNumberBasedOnDirection(yIndex + 1, xIndex, inputArray, 'left'));
+        temporaryAdjacentNumbers.push(returnAdjacentNumberBasedOnDirection(yIndex + 1, xIndex, inputArray, 'right'));
+      }
+
+      console.log(`Character ${inputArray[yIndex][xIndex]} on position ${yIndex + 1}:${xIndex + 1}`);
+
+      const filteredArray = temporaryAdjacentNumbers.filter((value) => value !== 0)
+
+      if(filteredArray.length === 2) {
+        const power = filteredArray.reduce((power, accumulator) => power * accumulator, 1)
+        adjacentNumbers.push(power)
+      }
+    }
+  }
+}
+
+console.log(calculateSumAdjacentNumbers(adjacentNumbers))
 /**
  * 
  * @param {Number} yIndex The y-position to start from
