@@ -3,9 +3,10 @@ import { readInputFromFile } from "../loadFile.mjs";
 import { FertilizerToWaterMapper, HumidityToLocationMapper, LightToTemperatureMapper, SeedToSoilMapper, SoilToFertilizerMapper, TemperatureToHumidityMapper, WaterToLightMapper } from "./mappers.mjs";
 import { Seed } from "./seed.mjs";
 
-const input = await readInputFromFile('./test.txt')
-console.log(input);
+const input = await readInputFromFile('./input.txt')
+
 const seeds = []
+const seedRanges = []
 const seedToSoilMappers = []
 const soilToFertilizerMapper = []
 const fertilizerToWaterMapper = []
@@ -36,6 +37,36 @@ const lowest = seeds.reduce((lowest, seed) => {
 
 console.log(lowest);
 
+// part 2
+const newSeeds = []
+for(let range of seedRanges) {
+  for(let index = 0; index < range.length; index++) {
+    newSeeds.push(new Seed(range.start + index))
+  }
+}
+
+console.log(newSeeds);
+
+// for(const seed of newSeeds) {
+//   seed.mapProperty('soil', seedToSoilMappers)
+//   seed.mapProperty('fertilizer', soilToFertilizerMapper)
+//   seed.mapProperty('water', fertilizerToWaterMapper)
+//   seed.mapProperty('light', waterToLightMapper)
+//   seed.mapProperty('temperature', lightToTemperatureMapper)
+//   seed.mapProperty('humidity', temperatureToHumidityMapper)
+//   seed.mapProperty('location', humidityToLocationMapper)
+// }
+
+// const lowest2 = newSeeds.reduce((lowest, seed) => {
+//   if(seed.location < lowest) {
+//     lowest = seed.location
+//   }
+
+//   return lowest
+// }, Number.MAX_VALUE)
+
+// console.log(lowest2);
+
 function parseInputToObjects() {
   let map = false
   let counter = -1
@@ -47,6 +78,10 @@ function parseInputToObjects() {
       const individualSeeds = seedString.split(' ')
       for(const seed of individualSeeds) {
         seeds.push(new Seed(seed))
+      }
+
+      for(let index = 0; index < individualSeeds.length; index += 2) {
+        seedRanges.push({'start': +individualSeeds[index], 'length': +individualSeeds[index + 1]})
       }
     }
 
