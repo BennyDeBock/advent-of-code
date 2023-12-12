@@ -9,12 +9,23 @@ export class Card {
     this.id = cardSplit[0].split(' ')[1]
     this.winningNumbers = winningNumbers.filter((value) => value !== '')
     this.pickedNumbers = pickedNumbers.filter((value) => value !== '')
-    console.log(this.id);
-    console.log(this.winningNumbers);
-    console.log(this.pickedNumbers);
   }
 
+  /**
+   * 
+   * @returns {Number} The number of points this card is worth
+   */
   calculatePoints() {
-    
+    return this.pickedNumbers.reduce((sum, picked) => {
+      if(this.winningNumbers.indexOf(picked) != -1) {
+        if(sum === 0) {
+          sum = 1
+        } else {
+          sum *= 2
+        }
+      }
+
+      return sum
+    }, 0)
   }
 }
