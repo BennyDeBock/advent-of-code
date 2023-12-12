@@ -1,4 +1,6 @@
 export class Card {
+  #amountOfCopies = 0
+
   constructor(cardString) {
     const cardSplit = cardString.split(':')
     const numberSplit = cardSplit[1].split('|')
@@ -6,7 +8,7 @@ export class Card {
     const pickedNumbers = numberSplit[1].split(' ')
 
     // Initialize variables
-    this.id = cardSplit[0].split(' ')[1]
+    this.id = cardSplit[0].split(' ').filter((value) => value !== '')[1]
     this.winningNumbers = winningNumbers.filter((value) => value !== '')
     this.pickedNumbers = pickedNumbers.filter((value) => value !== '')
   }
@@ -27,5 +29,27 @@ export class Card {
 
       return sum
     }, 0)
+  }
+
+  calculateAmountOfMatches() {
+    return this.pickedNumbers.reduce((sum, picked) => {
+      if(this.winningNumbers.indexOf(picked) != -1) {
+        sum++
+      }
+
+      return sum
+    }, 0)
+  }
+
+  increaseAmountOfCopies() {
+    this.#amountOfCopies++
+  }
+
+  /**
+   * 
+   * @returns {Number}
+   */
+  getAmountOfCopies() {
+    return this.#amountOfCopies
   }
 }
